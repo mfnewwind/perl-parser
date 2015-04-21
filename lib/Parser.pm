@@ -4,6 +4,7 @@ use utf8;
 
 use PPI;
 use JSON::XS;
+use Data::Dumper;
 
 our $json_data = []; #解析結果リスト
 our $line = 1;       #行数
@@ -88,7 +89,7 @@ sub push_variable_data {
     my ($variable, $comment) = @_; 
 
     my $variable_symbols = $variable->find('PPI::Token::Symbol');
-    if (scalar @$variable_symbols > 0 ) {
+    if ($variable_symbols && scalar @$variable_symbols > 0 ) {
         push @$json_data, {
             type => "variable",
             name => $variable_symbols->[0]->content,
@@ -104,7 +105,7 @@ sub push_function_data {
     my ($function, $comment) = @_;
 
     my $fuction_words = $function->find('PPI::Token::Word');
-    if (scalar @$fuction_words > 1) {
+    if ( $fuction_words && scalar @$fuction_words > 1) {
         my $fuction_lines = {
             start_line => $line,
             name_line =>  $line,
@@ -131,7 +132,7 @@ sub push_class_data {
     my ($class, $comment) = @_;
 
     my $package_words = $class->find('PPI::Token::Word');
-    if (scalar @$package_words > 1) {
+    if ($package_words && scalar @$package_words > 1) {
         $class_name = $package_words->[1]->content;
         push @$json_data, {
             type => "class",
