@@ -1,23 +1,25 @@
-#!/usr/bin/perl
-
+package Parser;
 use strict;
 use utf8;
 
 use PPI;
 use JSON::XS;
 
-my $document = PPI::Document->new($ARGV[0]);
-#print Dumper $document->children;
+our $json_data = []; #解析結果リスト
+our $line = 1;       #行数
+our $class_name = "";
 
-my $json_data = []; #解析結果リスト 
-my $line = 1;       #行数
-my $class_name = "";
+sub run {
+    my ($self, @args) = @_;
+    my $document = PPI::Document->new($args[0]);
 
-paser ($json_data, $document);
-my $output_json = JSON::XS->new->utf8->encode ($json_data);
-print $output_json;
+    parser ($json_data, $document);
+    my $output_json = JSON::XS->new->utf8->encode ($json_data);
+    print $output_json;
 
-sub paser {
+}
+
+sub parser {
     my ($json_data, $doc) = @_;
 
     if (exists $doc->{children}) {
@@ -39,7 +41,7 @@ sub paser {
                 # クラス定義の場合
                 push_class_data($q, get_variable_comment("", \@docs, $i));
             }
-            paser($json_data, $q);
+            parser($json_data, $q);
         }
     }
 }
@@ -166,4 +168,4 @@ sub paser_fuction{
         }
     }
 }
-
+1;

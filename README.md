@@ -3,5 +3,5 @@ perl-parser
 
 ## Usage
 ```sh
-$ perl ./lib/parser.pl "解析するファイル名.pl"
+$ perl ./script/parser.pl "解析するファイル名.pl"
 ```
