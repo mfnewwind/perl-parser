@@ -1,0 +1,8 @@
+machine:
+  #timezone: Asia/Tokyo
+  post:
+    - perl --version
+
+test:
+  override:
+    - prove -lvr t/test.t
