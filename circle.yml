@@ -5,4 +5,4 @@ machine:
 
 test:
   override:
-    - prove -lvr t/test.t
+    - prove -lvr t
