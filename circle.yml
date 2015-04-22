@@ -4,5 +4,9 @@ machine:
     - perl --version
 
 test:
+  pre:
+    - cpanm install Test::More
+    - cpanm install Test::Exception
+  
   override:
     - prove -lvr t
