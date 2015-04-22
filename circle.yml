@@ -5,8 +5,8 @@ machine:
 
 test:
   pre:
-    - cpanm install Test::More
-    - cpanm install Test::Exception
+    - cpan -i Test::More
+    - cpan -i Test::Exception
   
   override:
     - prove -lvr t
