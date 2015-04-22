@@ -4,9 +4,5 @@ machine:
     - perl --version
 
 test:
-  pre:
-    - cpan -i Test::More
-    - cpan -i Test::Exception
-  
   override:
     - prove -lvr t
