@@ -1,0 +1,25 @@
+sub main {
+    sub test {}
+    sub test {
+    }
+    sub 
+        test { 
+    }
+
+    #comment1
+    #comment2
+    #comment3
+    sub test_comment {}
+
+    #comment1
+    #comment2
+    #comment3
+    sub test_comment { #comment_
+        #comment1
+        #comment2
+        sub 
+            test_comment_1 {
+        }
+    }
+
+}

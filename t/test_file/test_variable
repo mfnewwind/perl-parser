@@ -1,0 +1,50 @@
+my $test;
+my @test;
+my %test;
+
+my $test = "test";
+my @test = ("test");
+my %test = { test => "test" };
+
+#test_
+my $test = "test"; #test
+#test_
+my @test = ("test"); #test
+#test_
+my %test = { test => "test" }; #test
+#test_
+
+our $test;
+our @test;
+our %test;
+
+our $test = "test";
+our @test = ("test");
+our %test = { test => "test" };
+
+local $test;
+local @test;
+local %test;
+
+local $test = "test";
+local @test = ("test");
+local %test = { test => "test" };
+
+{my $test = "test";}
+{my @test = ("test");}
+{my %test = { test => "test" };}
+
+{
+    my $test = "test";
+    my @test = ("test");
+    my %test = { test => "test" };
+    {
+        my $test = "test"; #test
+    }
+    {
+        my @test = ("test"); #test
+    }
+    {
+        my %test = { test => "test" }; #test
+    }
+}

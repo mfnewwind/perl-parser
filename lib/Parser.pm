@@ -77,12 +77,22 @@ sub get_variable_comment {
 sub get_function_comment {
     my ($comment, $docs, $i) = @_;
 
-    if (exists $docs->[$i - 1] && ref $docs->[$i - 1] eq 'PPI::Token::Comment') {
-        return get_function_comment($docs->[$i - 1]->content . $comment, $docs, $i - 1);
+    if (exists $docs->[$i - 1]) {
+        if (ref $docs->[$i - 1] eq 'PPI::Token::Comment') {
+            return get_function_comment(clean_comment($docs->[$i - 1]->content) . $comment, $docs, $i - 1);
+        }
+        elsif (ref $docs->[$i - 1] eq 'PPI::Token::Whitespace' && $docs->[$i - 1]->content !~ /\n/) {
+            return get_function_comment($comment, $docs, $i - 1);
+        }
     }
-    else {
-        return $comment;
-    }
+    return $comment;
+}
+
+# 取ったコメントの最初の空白はいらない
+sub clean_comment {
+    my $comment = shift;
+    $comment =~ s/^\s+//;
+    return $comment;
 }
 
 # 変数のデーターをjson_dataに入れる
