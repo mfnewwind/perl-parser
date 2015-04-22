@@ -1,24 +1,28 @@
-#!/usr/bin/perl
-
+package Parser;
 use strict;
 use utf8;
 
 use PPI;
 use JSON::XS;
 
-my $document = PPI::Document->new($ARGV[0]);
-#print Dumper $document->children;
+our $json_data = []; #解析結果リスト
+our $line = 1;       #行数
+our $class_name = "";
 
-my $json_data = []; #解析結果リスト 
-my $line = 1;       #行数
-my $class_name = "";
+sub run {
+    my ($self, @args) = @_;
+    my $document = PPI::Document->new($args[0]);
 
-paser ($json_data, $document);
-my $output_json = JSON::XS->new->utf8->encode ($json_data);
-print $output_json;
+    if (ref $document eq 'PPI::Document') {
+        parser ($document);
+    }
+    my $output_json = JSON::XS->new->utf8->encode ($json_data);
+    print $output_json;
 
-sub paser {
-    my ($json_data, $doc) = @_;
+}
+
+sub parser {
+    my $doc = shift;
 
     if (exists $doc->{children}) {
         my @docs = $doc->children;
@@ -39,7 +43,7 @@ sub paser {
                 # クラス定義の場合
                 push_class_data($q, get_variable_comment("", \@docs, $i));
             }
-            paser($json_data, $q);
+            parser($q);
         }
     }
 }
@@ -86,7 +90,7 @@ sub push_variable_data {
     my ($variable, $comment) = @_; 
 
     my $variable_symbols = $variable->find('PPI::Token::Symbol');
-    if (scalar @$variable_symbols > 0 ) {
+    if ($variable_symbols && scalar @$variable_symbols > 0 ) {
         push @$json_data, {
             type => "variable",
             name => $variable_symbols->[0]->content,
@@ -101,23 +105,23 @@ sub push_variable_data {
 sub push_function_data {
     my ($function, $comment) = @_;
 
-    my $fuction_words = $function->find('PPI::Token::Word');
-    if (scalar @$fuction_words > 1) {
-        my $fuction_lines = {
+    my $function_words = $function->find('PPI::Token::Word');
+    if ( $function_words && scalar @$function_words > 1) {
+        my $function_lines = {
             start_line => $line,
             name_line =>  $line,
             end_line => $line,
             name_line_flag => 0,
             name_line_complete => 1,
         };
-        paser_fuction($function, $fuction_lines);
+        paser_function($function, $function_lines);
 
         push @$json_data, {
-            type => "fuction",
-            name => $fuction_words->[1]->content,
-            line => $fuction_lines->{name_line},
-            start_line => $fuction_lines->{start_line},
-            end_line => $fuction_lines->{end_line},
+            type => "function",
+            name => $function_words->[1]->content,
+            line => $function_lines->{name_line},
+            start_line => $function_lines->{start_line},
+            end_line => $function_lines->{end_line},
             class_name => $class_name,
             comment => $comment,
         };
@@ -129,7 +133,7 @@ sub push_class_data {
     my ($class, $comment) = @_;
 
     my $package_words = $class->find('PPI::Token::Word');
-    if (scalar @$package_words > 1) {
+    if ($package_words && scalar @$package_words > 1) {
         $class_name = $package_words->[1]->content;
         push @$json_data, {
             type => "class",
@@ -143,7 +147,7 @@ sub push_class_data {
 }
 
 # 関数の識別子名行と終わり行を取る
-sub paser_fuction{
+sub paser_function{
     my ($doc, $function_lines) = @_;
 
     if (exists $doc->{children}) {
@@ -162,8 +166,8 @@ sub paser_fuction{
                     $function_lines->{name_line_flag} = 1;
                 }
             }
-            paser_fuction($q, $function_lines);
+            paser_function($q, $function_lines);
         }
     }
 }
-
+1;
