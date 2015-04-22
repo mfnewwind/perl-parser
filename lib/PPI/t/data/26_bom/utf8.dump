@@ -1,8 +1,0 @@
-PPI::Document
-  PPI::Token::BOM  	'﻿'
-  PPI::Statement
-    PPI::Token::Word  	'print'
-    PPI::Token::Whitespace  	' '
-    PPI::Token::Number  	'1'
-    PPI::Token::Structure  	';'
-  PPI::Token::Whitespace  	'\n'

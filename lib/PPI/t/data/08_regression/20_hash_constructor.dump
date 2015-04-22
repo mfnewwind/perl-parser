@@ -1,5 +1,0 @@
-PPI::Document
-  PPI::Statement
-    PPI::Token::Symbol  	'$a'
-    PPI::Token::Operator  	'='
-    PPI::Structure::Constructor  	{ ... }

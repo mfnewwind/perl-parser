@@ -1,3 +1,0 @@
-PPI::Document
-  PPI::Statement
-    PPI::Token::Number::Float  	'.1234'

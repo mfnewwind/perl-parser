@@ -1,5 +1,0 @@
-PPI::Document
-  PPI::Statement
-    PPI::Token::HereDoc  	'<<\EOF'
-    PPI::Token::Structure  	';'
-  PPI::Token::Whitespace  	'\n'
