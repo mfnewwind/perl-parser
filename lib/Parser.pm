@@ -16,7 +16,7 @@ sub run {
     if (ref $document eq 'PPI::Document') {
         parser ($document);
     }
-    my $output_json = JSON::XS->new->utf8->encode ($json_data);
+    my $output_json = JSON::XS->new->utf8(0)->encode ($json_data);
     print $output_json;
 
 }
